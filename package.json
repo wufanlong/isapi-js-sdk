@@ -18,6 +18,7 @@
   "homepage": "https://github.com/wufanlong/isapi-js-sdk#readme",
   "dependencies": {
     "crypto": "^1.0.1",
-    "isapi-js-client": "file:C:\\Users\\DannyChan\\Desktop\\wufanlong\\project\\isapi-js-client"
+    "fast-xml-parser": "^5.3.3",
+    "isapi-js-client": "file:C:\\Users\\heting\\isapi-js-client"
   }
 }

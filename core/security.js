@@ -4,7 +4,7 @@ import isapiClient from "isapi-js-client";
 export default function security(context) {
   return {
     getSecurityCapabilities() {
-        return callback(isapiClient.security.encryption.securityCapabilities, context)
+        return callback(isapiClient.security.securityCapabilities, context)
     }
   };
 }
