@@ -1,0 +1,23 @@
+{
+  "name": "isapi-js-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wufanlong/isapi-js-sdk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wufanlong/isapi-js-sdk/issues"
+  },
+  "homepage": "https://github.com/wufanlong/isapi-js-sdk#readme",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "isapi-js-client": "file:C:\\Users\\DannyChan\\Desktop\\wufanlong\\project\\isapi-js-client"
+  }
+}
