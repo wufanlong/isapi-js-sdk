@@ -11,8 +11,12 @@ export class isapiSDK {
       ip,
       username,
       password,
-      axiosOptions: null
+      axiosOptions: {
+        headers: {
+          Authorization: '',
+        }
+      }
     };
-    this.core = createCoreModule(this.context);
+    this.core = createCoreModule(this);
   }
 }

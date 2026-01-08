@@ -1,10 +1,10 @@
 import { callback } from "./client.js";
 import isapiClient from "isapi-js-client";
 
-export default function security(context) {
+export default function security(that) {
   return {
     getSecurityCapabilities() {
-        return callback(isapiClient.security.securityCapabilities, context)
+        return callback(isapiClient.security.securityCapabilities, that)
     }
   };
 }

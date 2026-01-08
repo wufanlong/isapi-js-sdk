@@ -1,9 +1,11 @@
 import client from './client.js'
 import security from './security.js'
+import system from './system.js'
 
-export function createCoreModule(context) {
+export function createCoreModule(that) {
     return {
-        client: client(context),
-        security: security(context),
+        client: client(that),
+        security: security(that),
+        system: system(that),
     }
 }

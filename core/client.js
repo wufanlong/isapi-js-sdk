@@ -1,12 +1,12 @@
 import { buildDigestAuth } from '../utils/authentication.js';
-export default function client(context) {
+export default function client(that) {
     return {
     }
 }
 
-export async function callback(f, context) {
+export async function callback(f, that) {
     try {
-        const response = await f(context);
+        const response = await f(that.context);
         return response;
     } catch (error) {
         const response = error.response;
@@ -18,9 +18,9 @@ export async function callback(f, context) {
                     .split(',')
                     .map(v => v.trim().split('=').map(s => s.replace(/"/g, '')))
             );
-            const authorization = buildDigestAuth({
-                username: context.username,
-                password: context.password,
+            const Authorization = buildDigestAuth({
+                username: that.context.username,
+                password: that.context.password,
                 method: response.config.method.toUpperCase(),
                 uri: new URL(response.config.url).pathname,
                 realm: params.realm,
@@ -28,12 +28,8 @@ export async function callback(f, context) {
                 qop: params.qop,
                 opaque: params.opaque
             }, response.data);
-            context.axiosOptions = {
-                headers: {
-                    Authorization: authorization
-                }
-            }
-            return f(context);
+            that.context.axiosOptions.headers.Authorization = Authorization;
+            return f(that.context);
         } else {
             throw new Error(error.message);
         }
