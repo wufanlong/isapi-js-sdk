@@ -14,7 +14,7 @@ export class isapiSDK extends EventEmitter {
     this.core = null;
     this.DeviceInfo = null;
     this.SecurityCap = null;
-
+    this.NetworkInterfaceList = null;
     this.axiosOptions = {
       headers: {
         Authorization: "",
@@ -25,6 +25,13 @@ export class isapiSDK extends EventEmitter {
   async init() {
     this.core = createCoreModule(this);
     this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
-    this.emit('deviceInfo', this.DeviceInfo);
+    this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
+    let deviceDetail = {
+      ...this.DeviceInfo,
+      subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress.subnetMask,
+      gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress.DefaultGateway.ipAddress,
+
+    }
+    this.emit('deviceInitd', deviceDetail);
   }
 }
