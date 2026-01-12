@@ -24,14 +24,17 @@ export class isapiSDK extends EventEmitter {
 
   async init() {
     this.core = createCoreModule(this);
-    this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
-    this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
-    let deviceDetail = {
-      ...this.DeviceInfo,
-      subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress.subnetMask,
-      gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress.DefaultGateway.ipAddress,
-
+    try {
+      this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
+      this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
+      let deviceDetail = {
+        ...this.DeviceInfo,
+        subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress?.subnetMask,
+        gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress?.DefaultGateway?.ipAddress,
+      }
+      this.emit('deviceInitd', deviceDetail);
+    } catch (error) {
+      this.emit('initFailed', error);
     }
-    this.emit('deviceInitd', deviceDetail);
   }
 }

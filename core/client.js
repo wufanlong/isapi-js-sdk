@@ -20,10 +20,18 @@ export async function callback(f, that) {
         authHeader,
         that
       );
-      const result = await f(that);
-      return toJson(result.data);
+      try {
+        const retryResponse = await f(that);
+        return toJson(retryResponse.data);
+      } catch (retryError) {
+        if (retryError.response && retryError.response.status === 401) {
+          throw new Error(`用户名或密码错误(用户名：${that.username}  密码：${that.password})`);
+        } else {
+          throw retryError;
+        }
+      }
     } else {
-      throw new Error(error.message);
+      throw error;
     }
   }
 }

@@ -5,11 +5,19 @@ export default function security(that) {
   return {
     async getSecurityCapabilities() {
       try {
-        const parsedData = await callback(isapiClient.security.securityCapabilities, that);
+        const parsedData = await callback(isapiClient.security.getSecurityCapabilities, that);
         return parsedData.SecurityCap;
       } catch (error) {
-        throw new Error(`Failed to get security capabilities: ${error.message}  sdk:${that}`);
+        throw error;
       }
-    }
+    },
+    async getUserCheck() {
+      try {
+        const parsedData = await callback(isapiClient.security.getUserCheck, that);
+        return parsedData.UserCheck;
+      } catch (error) {
+        throw error;
+      }
+    },
   };
 }
