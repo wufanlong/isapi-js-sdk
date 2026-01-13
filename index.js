@@ -15,10 +15,14 @@ export class isapiSDK extends EventEmitter {
     this.DeviceInfo = null;
     this.SecurityCap = null;
     this.NetworkInterfaceList = null;
+    // string uri start without '/'
+    this.axiosPathVar = null;
+    this.axiosData = null;
     this.axiosOptions = {
       headers: {
         Authorization: "",
       },
+      params: null,
     };
   }
 
