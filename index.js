@@ -15,6 +15,8 @@ export class isapiSDK extends EventEmitter {
     this.DeviceInfo = null;
     this.SecurityCap = null;
     this.NetworkInterfaceList = null;
+    this.VideoOverlay = null;
+    this.VideoInputChannel = null;
     // string uri start without '/'
     this.axiosPathVar = null;
     this.axiosData = null;
@@ -31,10 +33,14 @@ export class isapiSDK extends EventEmitter {
     try {
       this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
       this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
+      this.VideoOverlay = await this.core.system.getOverlaysByID()
+      this.VideoInputChannel = await this.core.system.getChannelNameByID()
       let deviceDetail = {
         ...this.DeviceInfo,
         subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress?.subnetMask,
         gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress?.DefaultGateway?.ipAddress,
+        VideoOverlay: this.VideoOverlay,
+        channelName: this.VideoInputChannel?.name
       }
       this.emit('deviceInitd', deviceDetail);
     } catch (error) {

@@ -19,5 +19,23 @@ export default function system(that) {
         throw error;
       }
     },
+    async getOverlaysByID(id = 1) {
+      try {
+        that.axiosPathVal = [id]
+        const parsedData = await callback(isapiClient.system.getVideoInputsChannelsOverlaysByID, that);
+        return parsedData.VideoOverlay;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async getChannelNameByID(id = 1) {
+      try {
+        that.axiosPathVal = [id]
+        const parsedData = await callback(isapiClient.system.getVideoInputsChannelsByID, that);
+        return parsedData.VideoInputChannel;
+      } catch (error) {
+        throw error;
+      }
+    },
   };
 }
