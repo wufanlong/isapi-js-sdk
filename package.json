@@ -20,6 +20,7 @@
     "crypto": "^1.0.1",
     "events": "^3.3.0",
     "fast-xml-parser": "^5.3.3",
-    "isapi-js-client": "file:C:\\Users\\DannyChan\\Desktop\\wufanlong\\project\\isapi-js-client"
+    "isapi-js-client": "file:C:\\Users\\DannyChan\\Desktop\\wufanlong\\project\\isapi-js-client",
+    "node-forge": "^1.3.3"
   }
 }

@@ -8,6 +8,10 @@ export default function system(that) {
         const parsedData = await callback(isapiClient.system.getDeviceInfo, that);
         return parsedData.DeviceInfo;
       } catch (error) {
+        // socket hang up
+        if (error.code === 'ECONNRESET') {
+          return {}
+        }
         throw error;
       }
     },

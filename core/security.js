@@ -1,5 +1,7 @@
 import { callback } from "./client.js";
 import isapiClient from "isapi-js-client";
+import { toXml } from "../utils/xmlJsonUtil.js";
+import { encodedPublicKey } from "../utils/encryption.js";
 
 export default function security(that) {
   return {
@@ -15,6 +17,19 @@ export default function security(that) {
       try {
         const parsedData = await callback(isapiClient.security.getUserCheck, that);
         return parsedData.UserCheck;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async getChallenge() {
+      that.axiosData = toXml({
+        PublicKey: {
+          key: encodedPublicKey
+        }
+      });
+      try {
+        const parsedData = await callback(isapiClient.security.postChallenge, that);
+        return parsedData.Challenge;
       } catch (error) {
         throw error;
       }

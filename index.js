@@ -17,12 +17,13 @@ export class isapiSDK extends EventEmitter {
     this.NetworkInterfaceList = null;
     this.VideoOverlay = null;
     this.VideoInputChannel = null;
-    // string uri start without '/'
+    // array
     this.axiosPathVar = null;
     this.axiosData = null;
     this.axiosOptions = {
       headers: {
         Authorization: "",
+        "Content-Type": "application/xml",
       },
       params: null,
     };
@@ -31,18 +32,26 @@ export class isapiSDK extends EventEmitter {
   async init() {
     this.core = createCoreModule(this);
     try {
+      // 判断是否为海康设备
+      this.Challenge = await this.core.security.getChallenge()
+      // 判断是否激活
       this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
-      this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
-      this.VideoOverlay = await this.core.system.getOverlaysByID()
-      this.VideoInputChannel = await this.core.system.getChannelNameByID()
-      let deviceDetail = {
-        ...this.DeviceInfo,
-        subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress?.subnetMask,
-        gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress?.DefaultGateway?.ipAddress,
-        VideoOverlay: this.VideoOverlay,
-        channelName: this.VideoInputChannel?.name
+      console.log("deviceinfo", this.DeviceInfo)
+      if (Object.keys(this.DeviceInfo).length !== 0) {
+        this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
+        this.VideoOverlay = await this.core.system.getOverlaysByID()
+        this.VideoInputChannel = await this.core.system.getChannelNameByID()
+        let deviceDetail = {
+          ...this.DeviceInfo,
+          subnetMask: this.NetworkInterfaceList.NetworkInterface.IPAddress?.subnetMask,
+          gateway: this.NetworkInterfaceList.NetworkInterface.IPAddress?.DefaultGateway?.ipAddress,
+          VideoOverlay: this.VideoOverlay,
+          channelName: this.VideoInputChannel?.name
+        }
+        this.emit('deviceInitd', deviceDetail);
+      } else {
+        this.emit('deviceInitd', {})
       }
-      this.emit('deviceInitd', deviceDetail);
     } catch (error) {
       this.emit('initFailed', error);
     }
