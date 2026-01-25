@@ -12,7 +12,7 @@ export class isapiSDK extends EventEmitter {
     this.ip = ip;
     this.username = username;
     this.password = password;
-    this.status = null;
+    this.status = "未激活";
 
     this.core = null;
     this.Challenge = null;
@@ -48,13 +48,12 @@ export class isapiSDK extends EventEmitter {
       // 判断是否激活
       this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
       if (Object.keys(this.DeviceInfo).length !== 0) {
+        this.status = '已激活'
         this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
         this.VideoOverlay = await this.core.system.getOverlaysByID()
         this.VideoInputChannel = await this.core.system.getChannelNameByID()
-        this.emit('deviceUpdate', this)
-      } else {
-        this.emit('deviceUpdate', {ip: this.ip})
       }
+      this.emit('deviceUpdated', this)
     } catch (error) {
       this.emit('initFailed', error);
     }

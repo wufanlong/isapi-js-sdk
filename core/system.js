@@ -14,7 +14,7 @@ export default function system(that) {
       try {
         const parsedData = await callback(isapiClient.system.putActivate, that);
         that.status = '激活成功'
-        that.emit('deviceUpdate', that)
+        that.init()
         return parsedData.ResponseStatus;
       } catch (error) {
         throw error;
