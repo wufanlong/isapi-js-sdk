@@ -1,7 +1,7 @@
 import { callback } from "./client.js";
 import isapiClient from "isapi-js-client";
 import { toXml } from "../utils/xmlJsonUtil.js";
-import { encodedPublicKey } from "../utils/encryption.js";
+import { getPublicKeyHex } from "../utils/encryption.js";
 
 export default function security(that) {
   return {
@@ -24,7 +24,7 @@ export default function security(that) {
     async getChallenge() {
       that.axiosData = toXml({
         PublicKey: {
-          key: encodedPublicKey
+          key: getPublicKeyHex(that.publicKey)
         }
       });
       try {

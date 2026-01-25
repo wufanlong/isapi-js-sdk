@@ -1,8 +1,25 @@
 import { callback } from "./client.js";
 import isapiClient from "isapi-js-client";
+import { getEncryptedPassword } from "../utils/encryption.js";
+import { toXml } from "../utils/xmlJsonUtil.js";
 
 export default function system(that) {
   return {
+    async activate() {
+      that.axiosData = toXml({
+        ActivateInfo: {
+          password: getEncryptedPassword(that.Challenge.key, that.privateKey, "sszx123456")
+        }
+      });
+      try {
+        const parsedData = await callback(isapiClient.system.putActivate, that);
+        that.status = '激活成功'
+        that.emit('deviceUpdate', that)
+        return parsedData.ResponseStatus;
+      } catch (error) {
+        throw error;
+      }
+    },
     async getSystemDeviceInfo() {
       try {
         const parsedData = await callback(isapiClient.system.getDeviceInfo, that);
