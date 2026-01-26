@@ -21,6 +21,7 @@ export default function security(that) {
         throw error;
       }
     },
+    // 设备未激活亦可调用 用于判断是否为海康设备 如果是则应当返回非404
     async getChallenge() {
       that.axiosData = toXml({
         PublicKey: {
@@ -31,6 +32,9 @@ export default function security(that) {
         const parsedData = await callback(isapiClient.security.postChallenge, that);
         return parsedData.Challenge;
       } catch (error) {
+        if (error.response && error != 404) {
+          return {}
+        }
         throw error;
       }
     },
