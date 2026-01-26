@@ -32,7 +32,7 @@ export default function security(that) {
         const parsedData = await callback(isapiClient.security.postChallenge, that);
         return parsedData.Challenge;
       } catch (error) {
-        if (error.response && error != 404) {
+        if (error.response && error.response.status !== 404) {
           return {}
         }
         throw error;

@@ -50,8 +50,10 @@ export class isapiSDK extends EventEmitter {
       if (Object.keys(this.DeviceInfo).length !== 0) {
         this.status = '已激活'
         this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
-        this.VideoOverlay = await this.core.system.getOverlaysByID()
-        this.VideoInputChannel = await this.core.system.getChannelNameByID()
+        if (["IPCamera", "IPDome"].includes(this.DeviceInfo.deviceType)) {
+          this.VideoOverlay = await this.core.system.getOverlaysByID()
+          this.VideoInputChannel = await this.core.system.getChannelNameByID()
+        }
       }
       this.emit('deviceUpdated', this)
     } catch (error) {
