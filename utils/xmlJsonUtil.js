@@ -56,8 +56,7 @@ export function toJson(input) {
   if (isJsonString(input)) {
     return JSON.parse(input);
   }
-
-  throw new Error("toJson: Unsupported input type");
+  throw new Error("toJson: Unsupported input type: ", input);
 }
 
 /**

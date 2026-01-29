@@ -11,7 +11,7 @@ export async function callback(f, that) {
   } catch (error) {
     const response = error.response;
     if (response && response.status === 401) {
-      const authHeader = response.headers.get("www-authenticate");
+      const authHeader = typeof response.headers.get === 'function' ? response.headers.get("www-authenticate") : response.headers["www-authenticate"]
       if (!authHeader) {
         throw new Error("Missing WWW-Authenticate header");
       }
@@ -25,7 +25,11 @@ export async function callback(f, that) {
         return toJson(retryResponse.data);
       } catch (retryError) {
         if (retryError.response && retryError.response.status === 401) {
-          throw new Error(`用户名或密码错误(用户名：${that.username}  密码：${that.password})`);
+          // sessionLogin查是否锁定
+          
+          retryError.message = `用户名或密码错误(用户名：${that.username}  密码：${that.password})`
+          throw retryError;
+          // throw new Error(`用户名或密码错误(用户名：${that.username}  密码：${that.password})`);
         } else {
           throw retryError;
         }
