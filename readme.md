@@ -6,4 +6,4 @@ isapi-js-sdk
 ├── storage     （存储）
 ├── alarm       （告警事件）
 ├── system      （系统与参数配置）
-└── index.js    （SDK 对外入口）
+└── index.ts    （SDK 对外入口）

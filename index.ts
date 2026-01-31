@@ -1,26 +1,33 @@
-import { createCoreModule } from "./core/index.js";
+import { createCoreModule } from "./core/index.ts";
 import { EventEmitter } from 'events';
-import { getKeyPair } from "./utils/encryption.js";
+import { getKeyPair } from "./utils/encryption.ts";
 export class isapiSDK extends EventEmitter {
+  ip: string;
+  username: string;
+  password: string;
+  status: string;
+  
+  core: string;
+  Challenge: object;
+  DeviceInfo: object;
+  SecurityCap: object;
+  NetworkInterfaceList: object;
+  VideoOverlay: object;
+  VideoInputChannel: object;
+
+  publicKey: string;
+  privateKey: string;
   /**
    * @param {string} ip - 设备 IP 地址
    * @param {string} username - 登录用户名
    * @param {string} password - 登录密码
    */
-  constructor(ip, username, password) {
+  constructor(ip: string, username: string, password: string) {
     super();
     this.ip = ip;
     this.username = username;
     this.password = password;
     this.status = "未激活";
-
-    this.core = null;
-    this.Challenge = null;
-    this.DeviceInfo = null;
-    this.SecurityCap = null;
-    this.NetworkInterfaceList = null;
-    this.VideoOverlay = null;
-    this.VideoInputChannel = null;
 
     this.publicKey = null;
     this.privateKey = null;
@@ -45,6 +52,7 @@ export class isapiSDK extends EventEmitter {
     try {
       // 判断是否为海康设备
       this.Challenge = await this.core.security.getChallenge()
+      console.log(this)
       // 判断是否激活
       this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
       if (Object.keys(this.DeviceInfo).length !== 0) {

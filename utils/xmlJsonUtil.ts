@@ -1,4 +1,3 @@
-// xmlJsonUtil.js
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 
 const parser = new XMLParser({

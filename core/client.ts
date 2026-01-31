@@ -1,10 +1,10 @@
-import { getAuthorization } from "../utils/authentication.js";
-import { toJson } from "../utils/xmlJsonUtil.js";
+import { getAuthorization } from "../utils/authentication.ts";
+import { toJson } from "../utils/xmlJsonUtil.ts";
 export default function client(that) {
   return {};
 }
 
-export async function callback(f, that) {
+export async function callback(f: Function, that) {
   try {
     const response = await f(that);
     return toJson(response.data);

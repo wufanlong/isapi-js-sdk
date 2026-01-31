@@ -1,15 +1,15 @@
 import crypto from "crypto";
 
-function md5(str) {
+function md5(str: string) {
   return crypto.createHash("md5").update(str).digest("hex");
 }
 
 export function getAuthorization(response, authHeader, that) {
   if (/^Basic\s/i.test(authHeader)) {
     const token = Buffer.from(`${that.username}:${that.password}`).toString(
-      "base64"
+      "base64",
     );
-    return `Basic ${token}`
+    return `Basic ${token}`;
   } else if (/^Digest\s/i.test(authHeader)) {
     const params = Object.fromEntries(
       authHeader
@@ -19,8 +19,8 @@ export function getAuthorization(response, authHeader, that) {
           v
             .trim()
             .split("=")
-            .map((s) => s.replace(/"/g, ""))
-        )
+            .map((s) => s.replace(/"/g, "")),
+        ),
     );
     return buildDigestAuth(
       {
@@ -33,7 +33,7 @@ export function getAuthorization(response, authHeader, that) {
         qop: params.qop,
         opaque: params.opaque,
       },
-      response.data
+      response.data,
     );
   } else {
     throw new Error(`Unsupported auth type: ${authHeader}`);
@@ -52,7 +52,7 @@ export function buildDigestAuth(
     opaque,
     nc = "00000001",
   },
-  data
+  data,
 ) {
   const cnonce = crypto.randomBytes(8).toString("hex");
 

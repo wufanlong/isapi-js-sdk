@@ -1,6 +1,6 @@
-import client from './client.js'
-import security from './security.js'
-import system from './system.js'
+import client from './client.ts'
+import security from './security.ts'
+import system from './system.ts'
 
 export function createCoreModule(that) {
     return {

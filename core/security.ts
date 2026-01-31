@@ -1,7 +1,7 @@
-import { callback } from "./client.js";
+import { callback } from "./client.ts";
 import isapiClient from "isapi-js-client";
-import { toXml } from "../utils/xmlJsonUtil.js";
-import { getPublicKeyHex } from "../utils/encryption.js";
+import { toXml } from "../utils/xmlJsonUtil.ts";
+import { getPublicKeyHex } from "../utils/encryption.ts";
 
 export default function security(that) {
   return {
@@ -30,8 +30,10 @@ export default function security(that) {
       });
       try {
         const parsedData = await callback(isapiClient.security.postChallenge, that);
+        console.log(parsedData)
         return parsedData.Challenge;
       } catch (error) {
+        console.log(error)
         if (error.response && error.response.status !== 404) {
           return {}
         }

@@ -1,7 +1,7 @@
-import { callback } from "./client.js";
+import { callback } from "./client.ts";
 import isapiClient from "isapi-js-client";
-import { getEncryptedPassword } from "../utils/encryption.js";
-import { toXml } from "../utils/xmlJsonUtil.js";
+import { getEncryptedPassword } from "../utils/encryption.ts";
+import { toXml } from "../utils/xmlJsonUtil.ts";
 
 export default function system(that) {
   return {
