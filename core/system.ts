@@ -58,5 +58,13 @@ export default function system(that) {
         throw error;
       }
     },
+    async reboot() {
+      try {
+        const parsedData = await callback(isapiClient.system.putReboot, that);
+        return parsedData;
+      } catch (error) {
+        throw error;
+      }
+    },
   };
 }

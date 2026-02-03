@@ -30,10 +30,8 @@ export default function security(that) {
       });
       try {
         const parsedData = await callback(isapiClient.security.postChallenge, that);
-        console.log(parsedData)
         return parsedData.Challenge;
       } catch (error) {
-        console.log(error)
         if (error.response && error.response.status !== 404) {
           return {}
         }

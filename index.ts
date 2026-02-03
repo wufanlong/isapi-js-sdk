@@ -7,7 +7,8 @@ export class isapiSDK extends EventEmitter {
   password: string;
   status: string;
   
-  core: string;
+  core: object;
+
   Challenge: object;
   DeviceInfo: object;
   SecurityCap: object;
@@ -17,6 +18,16 @@ export class isapiSDK extends EventEmitter {
 
   publicKey: string;
   privateKey: string;
+
+  axiosPathVar: Array<string>;
+  axiosData: object;
+  axiosOptions = {
+    headers: {
+      Authorization: "",
+      "Content-Type": "application/xml",
+    },
+    params: null as object,
+  };
   /**
    * @param {string} ip - 设备 IP 地址
    * @param {string} username - 登录用户名
@@ -32,16 +43,6 @@ export class isapiSDK extends EventEmitter {
     this.publicKey = null;
     this.privateKey = null;
 
-    // array
-    this.axiosPathVar = null;
-    this.axiosData = null;
-    this.axiosOptions = {
-      headers: {
-        Authorization: "",
-        "Content-Type": "application/xml",
-      },
-      params: null,
-    };
   }
 
   async init() {
@@ -52,7 +53,6 @@ export class isapiSDK extends EventEmitter {
     try {
       // 判断是否为海康设备
       this.Challenge = await this.core.security.getChallenge()
-      console.log(this)
       // 判断是否激活
       this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
       if (Object.keys(this.DeviceInfo).length !== 0) {
