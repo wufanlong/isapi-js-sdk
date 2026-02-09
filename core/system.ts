@@ -32,6 +32,17 @@ export default function system(that) {
         throw error;
       }
     },
+    async putDeviceInfo(data) {
+      that.axiosData = toXml({
+        DeviceInfo: data
+      });
+      try {
+        const parsedData = await callback(isapiClient.system.putDeviceInfo, that);
+        return parsedData.ResponseStatus;
+      } catch (error) {
+        throw error;
+      }
+    },
     async getSystemNetworkInterfaces() {
       try {
         const parsedData = await callback(isapiClient.system.network.getInterfaces, that);

@@ -7,20 +7,20 @@ export class isapiSDK extends EventEmitter {
   password: string;
   status: string;
   
-  core: object;
+  core!: object;
 
-  Challenge: object;
-  DeviceInfo: object;
-  SecurityCap: object;
-  NetworkInterfaceList: object;
-  VideoOverlay: object;
-  VideoInputChannel: object;
+  Challenge!: object;
+  DeviceInfo!: object;
+  SecurityCap!: object;
+  NetworkInterfaceList!: object;
+  VideoOverlay!: object;
+  VideoInputChannel!: object;
 
   publicKey: string;
   privateKey: string;
 
-  axiosPathVar: Array<string>;
-  axiosData: object;
+  axiosPathVar!: Array<string>;
+  axiosData!: object;
   axiosOptions = {
     headers: {
       Authorization: "",

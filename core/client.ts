@@ -5,6 +5,7 @@ export default function client(that) {
 }
 
 export async function callback(f: Function, that) {
+  delete that.axiosOptions.headers.Authorization
   try {
     const response = await f(that);
     return toJson(response.data);

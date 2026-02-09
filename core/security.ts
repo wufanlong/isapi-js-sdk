@@ -7,7 +7,7 @@ export default function security(that) {
   return {
     async getSecurityCapabilities() {
       try {
-        const parsedData = await callback(isapiClient.security.getSecurityCapabilities, that);
+        const parsedData = await callback(isapiClient.security.getCapabilities, that);
         return parsedData.SecurityCap;
       } catch (error) {
         throw error;
