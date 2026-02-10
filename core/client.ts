@@ -1,11 +1,12 @@
+import { isapiSDK } from "index.ts";
 import { getAuthorization } from "../utils/authentication.ts";
 import { toJson } from "../utils/xmlJsonUtil.ts";
 export default function client(that) {
   return {};
 }
 
-export async function callback(f: Function, that) {
-  delete that.axiosOptions.headers.Authorization
+export async function callback(f: Function, that: isapiSDK) {
+  that.axiosOptions.headers.Authorization = undefined;
   try {
     const response = await f(that);
     return toJson(response.data);
