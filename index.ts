@@ -46,26 +46,30 @@ export class isapiSDK extends EventEmitter {
   }
 
   async init() {
-    const keyPair = getKeyPair();
-    this.publicKey = keyPair.publicKey
-    this.privateKey = keyPair.privateKey
-    this.core = createCoreModule(this);
-    try {
-      // 判断是否为海康设备
-      this.Challenge = await this.core.security.getChallenge()
-      // 判断是否激活
-      this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
-      if (Object.keys(this.DeviceInfo).length !== 0) {
-        this.status = '已激活'
-        this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
-        if (["IPCamera", "IPDome"].includes(this.DeviceInfo.deviceType)) {
-          this.VideoOverlay = await this.core.system.getOverlaysByID()
-          this.VideoInputChannel = await this.core.system.getChannelNameByID()
+    return new Promise(async (resolve, reject) => {
+      const keyPair = getKeyPair();
+      this.publicKey = keyPair.publicKey
+      this.privateKey = keyPair.privateKey
+      this.core = createCoreModule(this);
+      try {
+        // 判断是否为海康设备
+        this.Challenge = await this.core.security.getChallenge()
+        // 判断是否激活
+        this.DeviceInfo = await this.core.system.getSystemDeviceInfo()
+        if (Object.keys(this.DeviceInfo).length !== 0) {
+          this.status = '已激活'
+          this.NetworkInterfaceList = await this.core.system.getSystemNetworkInterfaces()
+          if (["IPCamera", "IPDome"].includes(this.DeviceInfo.deviceType)) {
+            this.VideoOverlay = await this.core.system.getOverlaysByID()
+            this.VideoInputChannel = await this.core.system.getChannelNameByID()
+          }
         }
+        this.emit('deviceUpdated', this)
+      } catch (error) {
+        this.emit('initFailed', error);
+        reject(false)
       }
-      this.emit('deviceUpdated', this)
-    } catch (error) {
-      this.emit('initFailed', error);
-    }
+      resolve(true)
+    });
   }
 }
