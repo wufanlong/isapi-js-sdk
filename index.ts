@@ -18,6 +18,7 @@ export class isapiSDK extends EventEmitter {
   DeviceInfo!: object;
   SecurityCap!: object;
   NetworkInterfaceList!: object;
+  InputProxyChannelStatusList!: object;
   VideoOverlay!: object;
   VideoInputChannel!: object;
 
@@ -253,6 +254,17 @@ export class isapiSDK extends EventEmitter {
         this,
       );
       return parsedData.SecurityCap;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getChannelStatusList() {
+    try {
+      const parsedData = await callback(
+        isapiClient.ContentMgmt.getInputProxyChannelsStatus,
+        this,
+      );
+      return parsedData.InputProxyChannelStatusList.InputProxyChannelStatus;
     } catch (error) {
       throw error;
     }
