@@ -21,7 +21,8 @@ export class isapiSDK extends EventEmitter {
   InputProxyChannelStatusList!: object;
   VideoOverlay!: object;
   VideoInputChannel!: object;
-
+  hddList!: object;
+  trackDailyDistribution!: Array<Array<Array<object>>>;
   publicKey: string | null;
   privateKey: string | null;
 
@@ -66,6 +67,45 @@ export class isapiSDK extends EventEmitter {
           if (["IPCamera", "IPDome"].includes(this.DeviceInfo.deviceType)) {
             this.VideoOverlay = await this.getOverlaysByID();
             this.VideoInputChannel = await this.getChannelNameByID();
+          }
+        }
+        if (Object.keys(this.DeviceInfo).length !== 0) {
+          if (['IPC', 'NVR'].includes(this.DeviceInfo.deviceType)) {
+            this.InputProxyChannelStatusList = await this.getChannelStatusList();
+            this.hddList = await this.getStorageHdd();
+            this.trackDailyDistribution = []
+            for (let i = 0; i < this.InputProxyChannelStatusList.length; i++) {
+              let id = (i + 1) + "01"
+              const currentDate = new Date();
+              let nowYear = currentDate.getFullYear();
+              let nowMonth = currentDate.getMonth() + 1;
+              let year = nowYear
+              let month = nowMonth
+              let data = {
+                year: year,
+                monthOfYear: month
+              }
+              for (let j = 24; j > 0; j--) {
+                let trackDailyDistribution = await this.postRecordTracksDailyDistributionByID(id, data)
+                let day = trackDailyDistribution.dayList.day.find(d => !d.record)
+                this.trackDailyDistribution.push({
+                  ...trackDailyDistribution,
+                  ...data
+                })
+                if (day && !(year === nowYear && month === nowMonth)) {
+                  break;
+                }
+                month--;
+                if (month == 0) {
+                  month = 12;
+                  year--;
+                }
+                data = {
+                  year: year,
+                  monthOfYear: month
+                }
+              }
+            }
           }
         }
         this.emit("deviceUpdated", this);
@@ -258,6 +298,33 @@ export class isapiSDK extends EventEmitter {
       throw error;
     }
   }
+  async getTime() {
+    try {
+      const parsedData = await callback(
+        isapiClient.system.getTime,
+        this,
+      );
+      return parsedData.Time;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async putTime(data: object) {
+    this.axiosData = toXml({
+      Time: data,
+    });
+    try {
+      const parsedData = await callback(isapiClient.system.putTime, this);
+      if (parsedData.ResponseStatus.statusCode === 1) {
+        this.status = "修改时间成功";
+        this.emit("log:info", `${this.ip}修改时间成功`);
+        this.emit("deviceUpdated", this);
+      }
+      return parsedData.ResponseStatus;
+    } catch (error) {
+      throw error;
+    }
+  }
   async getChannelStatusList() {
     try {
       const parsedData = await callback(
@@ -265,6 +332,29 @@ export class isapiSDK extends EventEmitter {
         this,
       );
       return parsedData.InputProxyChannelStatusList.InputProxyChannelStatus;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getStorageHdd() {
+    try {
+      const parsedData = await callback(
+        isapiClient.ContentMgmt.getStorageHdd,
+        this,
+      );
+      return parsedData.hddList;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async postRecordTracksDailyDistributionByID(id="101", data: object) {
+    this.axiosData = toXml({
+      trackDailyParam: data,
+    });
+    this.axiosPathVar = [id];
+    try {
+      const parsedData = await callback(isapiClient.ContentMgmt.postRecordTracksDailyDistributionByID, this);
+      return parsedData.trackDailyDistribution;
     } catch (error) {
       throw error;
     }
