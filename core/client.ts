@@ -9,6 +9,7 @@ export async function callback(f: Function, that: isapiSDK) {
   that.axiosOptions.headers.Authorization = undefined;
   try {
     const response = await f(that);
+    console.log(response)
     return toJson(response.data);
   } catch (error) {
     const response = error.response;
@@ -24,6 +25,7 @@ export async function callback(f: Function, that: isapiSDK) {
       );
       try {
         const retryResponse = await f(that);
+        console.log("retryResponse", retryResponse)
         return toJson(retryResponse.data);
       } catch (retryError) {
         if (retryError.response && retryError.response.status === 401) {

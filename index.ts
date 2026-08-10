@@ -15,6 +15,7 @@ export class isapiSDK extends EventEmitter {
   status: string;
 
   Challenge!: object;
+  UserCheck!: object;
   DeviceInfo!: object;
   SecurityCap!: object;
   NetworkInterfaceList!: object;
@@ -58,7 +59,8 @@ export class isapiSDK extends EventEmitter {
       this.privateKey = keyPair.privateKey;
       try {
         // 判断是否为海康设备
-        this.Challenge = await this.getChallenge();
+        // this.UserCheck = await this.getUserCheck();
+        // this.Challenge = await this.getChallenge();
         // 判断是否激活
         this.DeviceInfo = await this.getSystemDeviceInfo();
         if (Object.keys(this.DeviceInfo).length !== 0) {
@@ -69,45 +71,46 @@ export class isapiSDK extends EventEmitter {
             this.VideoInputChannel = await this.getChannelNameByID();
           }
         }
-        if (Object.keys(this.DeviceInfo).length !== 0) {
-          if (['IPC', 'NVR'].includes(this.DeviceInfo.deviceType)) {
-            this.InputProxyChannelStatusList = await this.getChannelStatusList();
-            this.hddList = await this.getStorageHdd();
-            this.trackDailyDistribution = []
-            for (let i = 0; i < this.InputProxyChannelStatusList.length; i++) {
-              let id = (i + 1) + "01"
-              const currentDate = new Date();
-              let nowYear = currentDate.getFullYear();
-              let nowMonth = currentDate.getMonth() + 1;
-              let year = nowYear
-              let month = nowMonth
-              let data = {
-                year: year,
-                monthOfYear: month
-              }
-              for (let j = 24; j > 0; j--) {
-                let trackDailyDistribution = await this.postRecordTracksDailyDistributionByID(id, data)
-                let day = trackDailyDistribution.dayList.day.find(d => !d.record)
-                this.trackDailyDistribution.push({
-                  ...trackDailyDistribution,
-                  ...data
-                })
-                if (day && !(year === nowYear && month === nowMonth)) {
-                  break;
-                }
-                month--;
-                if (month == 0) {
-                  month = 12;
-                  year--;
-                }
-                data = {
-                  year: year,
-                  monthOfYear: month
-                }
-              }
-            }
-          }
-        }
+        // 硬盘配置
+        // if (Object.keys(this.DeviceInfo).length !== 0) {
+        //   if (['IPC', 'NVR', 'DVR'].includes(this.DeviceInfo.deviceType)) {
+        //     this.InputProxyChannelStatusList = await this.getChannelStatusList();
+        //     this.hddList = await this.getStorageHdd();
+        //     this.trackDailyDistribution = []
+        //     for (let i = 0; i < this.InputProxyChannelStatusList.length; i++) {
+        //       let id = (i + 1) + "01"
+        //       const currentDate = new Date();
+        //       let nowYear = currentDate.getFullYear();
+        //       let nowMonth = currentDate.getMonth() + 1;
+        //       let year = nowYear
+        //       let month = nowMonth
+        //       let data = {
+        //         year: year,
+        //         monthOfYear: month
+        //       }
+        //       for (let j = 24; j > 0; j--) {
+        //         let trackDailyDistribution = await this.postRecordTracksDailyDistributionByID(id, data)
+        //         let day = trackDailyDistribution.dayList.day.find(d => !d.record)
+        //         this.trackDailyDistribution.push({
+        //           ...trackDailyDistribution,
+        //           ...data
+        //         })
+        //         if (day && !(year === nowYear && month === nowMonth)) {
+        //           break;
+        //         }
+        //         month--;
+        //         if (month == 0) {
+        //           month = 12;
+        //           year--;
+        //         }
+        //         data = {
+        //           year: year,
+        //           monthOfYear: month
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
         this.emit("deviceUpdated", this);
       } catch (error) {
         this.emit("initFailed", error);
