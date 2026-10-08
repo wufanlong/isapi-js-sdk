@@ -23,11 +23,9 @@ export function getAuthorization(response, authHeader, that) {
             .map((s) => s.replace(/"/g, "")),
         ),
     );
-    console.log("response", response)
     // 老页面
     if (!response.config) {
       let m_szUserPwdValue = Base64.encode(that.username + ":" + that.password);
-      console.log("老页面", "Basic " + m_szUserPwdValue)
       that.axiosOptions.headers['If-Modified-Since'] = 0
       return "Basic " + m_szUserPwdValue
     }

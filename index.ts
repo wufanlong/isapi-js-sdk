@@ -339,6 +339,17 @@ export class isapiSDK extends EventEmitter {
       throw error;
     }
   }
+  async getChannelsList() {
+    try {
+      const parsedData = await callback(
+        isapiClient.ContentMgmt.getInputProxyChannels,
+        this,
+      );
+      return parsedData.InputProxyChannelList.InputProxyChannel;
+    } catch (error) {
+      throw error;
+    }
+  }
   async getStorageHdd() {
     try {
       const parsedData = await callback(
@@ -358,6 +369,17 @@ export class isapiSDK extends EventEmitter {
     try {
       const parsedData = await callback(isapiClient.ContentMgmt.postRecordTracksDailyDistributionByID, this);
       return parsedData.trackDailyDistribution;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async postSearch(data: object) {
+    this.axiosData = toXml({
+      CMSearchDescription: data,
+    });
+    try {
+      const parsedData = await callback(isapiClient.ContentMgmt.postSearch, this);
+      return parsedData.CMSearchResult;
     } catch (error) {
       throw error;
     }
